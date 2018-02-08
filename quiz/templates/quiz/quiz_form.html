@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load quiz_tags %}
+
+{% block who %} ( {{ lanid }} ) {% endblock %}
+
+{% block main %}
+    <form method="post">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        {% for form in formset %}
+            {{ form.id }}
+            {{ form.quiz.as_hidden }}
+            {{ form.question.as_hidden }}
+            {% get_question form.question as question %}
+            <div class="input-field" style="padding-bottom: 3px">
+                {{ forloop.counter }}) {{ question.text }}
+                <div class="row">
+                    {% if question.possible_answers.all.count > 1 %}
+                        {% for radio in form.answer %}
+                            {% if radio.choice_label != '---------' %}
+                            <div class="col s12 m4">
+                                {{ radio.tag }}
+                                <label for="{{ radio.id_for_label }}">
+                                    {{ radio.choice_label }}
+                                </label>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {{ form.answer.as_hidden }}
+                        <div class="col s12">
+                            {{ form.answer_text }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn waves-effect waves-light">Go</button>
+    </form>
+{% endblock %}
+
+{% block info %}
+    <div class="red-text">
+        {% for msg in formset.errors %}
+            {{ msg }}
+        {% endfor %}
+    </div>
+{% endblock %}

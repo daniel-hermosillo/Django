@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load quiz_tags %}
+
+{% block main %}
+<form method="post">
+    {% csrf_token %}
+    <label for"{{ form.lanid.id_for_label }}">{{ form.lanid.label }}</label>
+    {{ form.lanid }}
+    <button type="submit" class="btn waves-effect waves-light">Next</button>
+</form>
+{% endblock %}
+
+{% block err_info %}
+    <div class="red-text">
+    {% for field, errors in form.errors.items %}
+        {% for msg in errors %}
+            {{ msg }}<br>
+        {% endfor %}
+    {% endfor %}
+    </div>
+{% endblock %}

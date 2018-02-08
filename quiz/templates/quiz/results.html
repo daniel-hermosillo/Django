@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load quiz_tags %}
+{% block main %}
+    {% for question in object_list %}
+	<p style='margin: 15px 0;'> 
+	<span style='font-weight:bold'>{{ question.text }}</span>
+	{% if question.possible_answers.all|length %}
+		{% for answer in question.possible_answers.all %}
+			<p>{{ answer.text }} <small style='font-weight:bold'>{% get_answer_count question answer %}</small></p>
+		</p>
+		{% endfor %}
+	{% else %}
+		{% get_open_answers question as open_answers %}
+		{% for quiz_answer in open_answers  %}
+			<p>- {{ quiz_answer.answer.text }}</p>
+		{% endfor %}	
+	{% endif %}
+    {% endfor %}
+{% endblock %}
